@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% block title %}Quadro de Tarefas{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h3>Quadro de {{ current_user.username }}</h3>
+  <div>
+    <a href="{{ url_for('tasks.export_csv') }}" class="btn btn-outline-secondary btn-sm">Exportar CSV</a>
+    <a href="{{ url_for('tasks.export_pdf') }}" class="btn btn-outline-secondary btn-sm">Exportar PDF</a>
+  </div>
+</div>
+<div class="row g-3">
+  <div class="col-md-4">
+    <div class="kanban-column" data-status="todo">
+      <h5>A Fazer</h5>
+      <div class="kanban-list" id="todo-list">
+        {% for t in tasks_todo %}
+          <div class="kanban-item" draggable="true" data-id="{{ t.id }}">{{ t.title }}</div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="kanban-column" data-status="doing">
+      <h5>Em Progresso</h5>
+      <div class="kanban-list" id="doing-list">
+        {% for t in tasks_doing %}
+          <div class="kanban-item" draggable="true" data-id="{{ t.id }}">{{ t.title }}</div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="kanban-column" data-status="done">
+      <h5>Concluído</h5>
+      <div class="kanban-list" id="done-list">
+        {% for t in tasks_done %}
+          <div class="kanban-item" draggable="true" data-id="{{ t.id }}">{{ t.title }}</div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr/>
+<h5>Criar nova tarefa</h5>
+<form method="post" action="{{ url_for('tasks.create_task') }}" novalidate>
+  {{ form.hidden_tag() }}
+  <div class="row g-2">
+    <div class="col-md-4">{{ form.title(class='form-control', placeholder='Título (use @usuario para mencionar)') }}</div>
+    <div class="col-md-4">{{ form.description(class='form-control', placeholder='Descrição (suporta @menções)') }}</div>
+    <div class="col-md-2">{{ form.status(class='form-select') }}</div>
+    <div class="col-md-2">{{ form.submit(class='btn btn-success w-100') }}</div>
+  </div>
+</form>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/board.js') }}"></script>
+<script>
+window.jwtToken = null;
+async function fetchToken() {
+  const resp = await fetch('/api/token', {method: 'POST'});
+  const data = await resp.json();
+  window.jwtToken = data.access_token;
+}
+fetchToken();
+</script>
+{% endblock %}
