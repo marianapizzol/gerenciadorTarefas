@@ -1,6 +1,54 @@
 # Gerenciador de Tarefas Colaborativo (Flask)
 
+**Link inicial**: [http://localhost:5000/](http://localhost:5000/)
+
 Aplicação web segura construída com Flask, seguindo o padrão MVC, com autenticação por sessão (Flask-Login), APIs protegidas por JWT, opção de OAuth (placeholders), proteção contra XSS/CSRF/SQL Injection, drag-and-drop de tarefas, histórico de alterações, @menções com notificação por e-mail, e exportação CSV/PDF.
+
+## Passo a passo (PC novo)
+1. Instale dependências do sistema (Ubuntu/Debian):
+   ```bash
+   sudo apt-get update -y
+   sudo apt-get install -y git python3 python3-venv python3-pip
+   ```
+2. Clone o repositório e entre na pasta:
+   ```bash
+   git clone <URL_DO_SEU_REPOSITORIO>
+   cd <PASTA_DO_REPOSITORIO>
+   ```
+3. Crie o ambiente virtual e instale as dependências Python:
+   ```bash
+   python3 -m venv .venv
+   source .venv/bin/activate
+   pip install --upgrade pip
+   pip install -r requirements.txt
+   ```
+4. Configure variáveis de ambiente (crie `.env` a partir do exemplo):
+   ```bash
+   cp .env.example .env
+   ```
+   - O banco padrão é SQLite em `instance/app.db` (sem configuração extra).
+5. Inicialize o banco de dados (migrations):
+   ```bash
+   flask --app run.py db init   # se ainda não existir a pasta migrations
+   flask --app run.py db migrate -m "init"
+   flask --app run.py db upgrade
+   ```
+6. (Opcional) Inicie um servidor SMTP de desenvolvimento para ver e-mails no console:
+   ```bash
+   python -m smtpd -c DebuggingServer -n localhost:1025
+   ```
+7. Execute a aplicação:
+   ```bash
+   python run.py
+   ```
+8. Abra no navegador (Google Chrome):
+   - Quadro (protegido): [http://localhost:5000/](http://localhost:5000/)
+   - Registro: [http://localhost:5000/register](http://localhost:5000/register)
+   - Login: [http://localhost:5000/login](http://localhost:5000/login)
+   - Alterar senha: [http://localhost:5000/change-password](http://localhost:5000/change-password)
+   - Logout: [http://localhost:5000/logout](http://localhost:5000/logout)
+   - Exportar CSV: [http://localhost:5000/export/tasks.csv](http://localhost:5000/export/tasks.csv)
+   - Exportar PDF: [http://localhost:5000/export/tasks.pdf](http://localhost:5000/export/tasks.pdf)
 
 ## Funcionalidades
 - Autenticação segura: registro, login/logout, alteração de senha (hash com Werkzeug)
