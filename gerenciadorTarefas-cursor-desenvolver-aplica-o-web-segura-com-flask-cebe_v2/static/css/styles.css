@@ -1,0 +1,4 @@
+.kanban-column { background-color: #f8f9fa; padding: 10px; border-radius: 6px; border: 1px solid #e9ecef; min-height: 400px; }
+.kanban-list { min-height: 350px; }
+.kanban-item { background-color: white; border: 1px solid #dee2e6; padding: 8px 10px; border-radius: 4px; margin-bottom: 8px; cursor: grab; }
+.kanban-item.dragging { opacity: 0.6; }
